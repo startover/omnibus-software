@@ -18,28 +18,37 @@
 name "zlib"
 default_version "1.2.8"
 
-version "1.2.6" do
-  source md5: "618e944d7c7cd6521551e30b32322f4a"
-end
+if ohai['platform'] != 'windows'
 
-version "1.2.8" do
-  source md5: "44d667c142d7cda120332623eab69f40"
-end
+  version "1.2.6" do
+    source md5: "618e944d7c7cd6521551e30b32322f4a"
+  end
 
-source url: "http://zlib.net/zlib-#{version}.tar.gz"
+  version "1.2.8" do
+    source md5: "44d667c142d7cda120332623eab69f40"
+  end
 
-relative_path "zlib-#{version}"
+  source url: "http://zlib.net/zlib-#{version}.tar.gz"
 
-# we omit the omnibus path here because it breaks mac_os_x builds by picking up the embedded libtool
-# instead of the system libtool which the zlib configure script cannot handle.
-#env = with_embedded_path()
-env = with_standard_compiler_flags()
-# for some reason zlib needs this flag on solaris (cargocult warning?)
-env['CFLAGS'] << " -DNO_VIZ" if ohai['platform'] == 'solaris2'
+  relative_path "zlib-#{version}"
 
-build do
-  ship_license "https://gist.githubusercontent.com/remh/77877aa00b45c1ebc152/raw/372a65de9f4c4ed376771b8d2d0943da83064726/zlib.license"
-  command "./configure --prefix=#{install_dir}/embedded", :env => env
-  command "make -j #{workers}", :env => env
-  command "make -j #{workers} install", :env => env
+  # we omit the omnibus path here because it breaks mac_os_x builds by picking up the embedded libtool
+  # instead of the system libtool which the zlib configure script cannot handle.
+  #env = with_embedded_path()
+  env = with_standard_compiler_flags()
+  # for some reason zlib needs this flag on solaris (cargocult warning?)
+  env['CFLAGS'] << " -DNO_VIZ" if ohai['platform'] == 'solaris2'
+
+  build do
+    ship_license "https://gist.githubusercontent.com/remh/77877aa00b45c1ebc152/raw/372a65de9f4c4ed376771b8d2d0943da83064726/zlib.license"
+    command "./configure --prefix=#{install_dir}/embedded", :env => env
+    command "make -j #{workers}", :env => env
+    command "make -j #{workers} install", :env => env
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

@@ -133,7 +133,7 @@ if ohai['platform'] != "windows"
     end
   end
 else
-  # We create a dummy file for the omnibus git_cache to work
+  # We create a dummy file for the omnibus git_cache to work on Windows
   build do
     command "touch #{install_dir}/uselessfile"
   end
