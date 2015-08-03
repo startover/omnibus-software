@@ -18,37 +18,46 @@
 name "pkg-config"
 default_version "0.28"
 
-dependency "libiconv"
+if ohai['platform'] != 'windows'
 
-version "0.28" do
-  source md5: "aa3c86e67551adc3ac865160e34a2a0d"
-end
+  dependency "libiconv"
 
-source url: "http://pkgconfig.freedesktop.org/releases/pkg-config-#{version}.tar.gz"
+  version "0.28" do
+    source md5: "aa3c86e67551adc3ac865160e34a2a0d"
+  end
 
-relative_path 'pkg-config-0.28'
+  source url: "http://pkgconfig.freedesktop.org/releases/pkg-config-#{version}.tar.gz"
 
-env = with_embedded_path()
-env = with_standard_compiler_flags(env, :aix => { :use_gcc => true })
+  relative_path 'pkg-config-0.28'
 
-paths = [ "#{install_dir}/embedded/bin/pkgconfig" ]
+  env = with_embedded_path()
+  env = with_standard_compiler_flags(env, :aix => { :use_gcc => true })
 
-build do
-  ship_source "http://pkgconfig.freedesktop.org/releases/pkg-config-#{version}.tar.gz"
-  command "./configure --prefix=#{install_dir}/embedded --disable-debug --disable-host-tool --with-internal-glib --with-pc-path=#{paths*':'}", :env => env
-  # #203: pkg-configs internal glib does not provide a way to pass ldflags.
-  # Only allows GLIB_CFLAGS and GLIB_LIBS.
-  # These do not serve our purpose, so we must explicitly
-  # ./configure in the glib dir, with the Omnibus ldflags.
-  command(
-    [
-      './configure',
-      "--prefix=#{install_dir}/embedded",
-      '--with-libiconv=gnu'
-    ].join(' '),
-    env: env,
-    cwd: File.join(project_dir, 'glib')
-  )
-  command "make -j #{workers}", env: env
-  command "make -j #{workers} install", env: env
+  paths = [ "#{install_dir}/embedded/bin/pkgconfig" ]
+
+  build do
+    ship_source "http://pkgconfig.freedesktop.org/releases/pkg-config-#{version}.tar.gz"
+    command "./configure --prefix=#{install_dir}/embedded --disable-debug --disable-host-tool --with-internal-glib --with-pc-path=#{paths*':'}", :env => env
+    # #203: pkg-configs internal glib does not provide a way to pass ldflags.
+    # Only allows GLIB_CFLAGS and GLIB_LIBS.
+    # These do not serve our purpose, so we must explicitly
+    # ./configure in the glib dir, with the Omnibus ldflags.
+    command(
+      [
+        './configure',
+        "--prefix=#{install_dir}/embedded",
+        '--with-libiconv=gnu'
+      ].join(' '),
+      env: env,
+      cwd: File.join(project_dir, 'glib')
+    )
+    command "make -j #{workers}", env: env
+    command "make -j #{workers} install", env: env
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end
