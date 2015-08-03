@@ -18,39 +18,48 @@
 name "libiconv"
 default_version "1.14"
 
-dependency "libgcc"
+if ohai['platform'] != 'windows'
 
-source :url => "http://ftp.gnu.org/pub/gnu/libiconv/libiconv-#{version}.tar.gz",
-       :md5 => 'e34509b1623cec449dfeb73d7ce9c6c6'
+  dependency "libgcc"
 
-relative_path "libiconv-#{version}"
+  source :url => "http://ftp.gnu.org/pub/gnu/libiconv/libiconv-#{version}.tar.gz",
+         :md5 => 'e34509b1623cec449dfeb73d7ce9c6c6'
 
-env = case ohai['platform']
-      when "aix"
-        {
-          "CC" => "xlc -q64",
-          "CXX" => "xlC -q64",
-          "LDFLAGS" => "-q64 -Wl,-blibpath:/usr/lib:/lib",
-          "CFLAGS" => "-O -q64 -I#{install_dir}/embedded/include",
-          "CXXFLAGS" => "-O -q64 -I#{install_dir}/embedded/include",
-          "LD" => "ld -b64",
-          "OBJECT_MODE" => "64",
-          "ARFLAGS" => "-X64 cru "
-        }
-      else
-        {
-          "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-          "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
-        }
-      end
+  relative_path "libiconv-#{version}"
 
-if ohai['platform'] == "solaris2"
-  env.merge!({"LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include -static-libgcc", "LD_OPTIONS" => "-R#{install_dir}/embedded/lib"})
-end
+  env = case ohai['platform']
+        when "aix"
+          {
+            "CC" => "xlc -q64",
+            "CXX" => "xlC -q64",
+            "LDFLAGS" => "-q64 -Wl,-blibpath:/usr/lib:/lib",
+            "CFLAGS" => "-O -q64 -I#{install_dir}/embedded/include",
+            "CXXFLAGS" => "-O -q64 -I#{install_dir}/embedded/include",
+            "LD" => "ld -b64",
+            "OBJECT_MODE" => "64",
+            "ARFLAGS" => "-X64 cru "
+          }
+        else
+          {
+            "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+            "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+          }
+        end
 
-build do
-  patch :source => 'libiconv-1.14_srclib_stdio.in.h-remove-gets-declarations.patch'
-  command "./configure --prefix=#{install_dir}/embedded", :env => env
-  command "make -j #{workers}", :env => env
-  command "make -j #{workers} install-lib libdir=#{install_dir}/embedded/lib includedir=#{install_dir}/embedded/include", :env => env
+  if ohai['platform'] == "solaris2"
+    env.merge!({"LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include -static-libgcc", "LD_OPTIONS" => "-R#{install_dir}/embedded/lib"})
+  end
+
+  build do
+    patch :source => 'libiconv-1.14_srclib_stdio.in.h-remove-gets-declarations.patch'
+    command "./configure --prefix=#{install_dir}/embedded", :env => env
+    command "make -j #{workers}", :env => env
+    command "make -j #{workers} install-lib libdir=#{install_dir}/embedded/lib includedir=#{install_dir}/embedded/include", :env => env
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end
