@@ -18,7 +18,7 @@
 name "ncurses"
 default_version "5.9"
 
-if not windows?
+if ohai['platform'] != "windows"
   dependency "libgcc"
   dependency "libtool" if ohai['platform'] == "aix"
 
