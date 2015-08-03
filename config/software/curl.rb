@@ -18,37 +18,46 @@
 name "curl"
 default_version "7.41.0"
 
-dependency "zlib"
-dependency "openssl"
+if ohai['platform'] != 'windows'
 
-source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-       :md5 => "7321a0a3012f8eede729b5a44ebef5bd"
+  dependency "zlib"
+  dependency "openssl"
 
-relative_path "curl-#{version}"
+  source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
+         :md5 => "7321a0a3012f8eede729b5a44ebef5bd"
 
-build do
-  ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
-  block do
-    FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
+  relative_path "curl-#{version}"
+
+  build do
+    ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
+    block do
+      FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
+    end
+
+    command ["./configure",
+             "--prefix=#{install_dir}/embedded",
+             "--disable-manual",
+             "--disable-debug",
+             "--enable-optimize",
+             "--disable-ldap",
+             "--disable-ldaps",
+             "--disable-rtsp",
+             "--enable-proxy",
+             "--disable-dependency-tracking",
+             "--enable-ipv6",
+             "--without-libidn",
+             "--without-gnutls",
+             "--without-librtmp",
+             "--with-ssl=#{install_dir}/embedded",
+             "--with-zlib=#{install_dir}/embedded"].join(" ")
+
+    command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
+    command "make install"
   end
 
-  command ["./configure",
-           "--prefix=#{install_dir}/embedded",
-           "--disable-manual",
-           "--disable-debug",
-           "--enable-optimize",
-           "--disable-ldap",
-           "--disable-ldaps",
-           "--disable-rtsp",
-           "--enable-proxy",
-           "--disable-dependency-tracking",
-           "--enable-ipv6",
-           "--without-libidn",
-           "--without-gnutls",
-           "--without-librtmp",
-           "--with-ssl=#{install_dir}/embedded",
-           "--with-zlib=#{install_dir}/embedded"].join(" ")
-
-  command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
-  command "make install"
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

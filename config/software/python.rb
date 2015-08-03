@@ -17,44 +17,54 @@
 
 name "python"
 default_version "2.7.10"
-dependency "ncurses"
-dependency "zlib"
-dependency "openssl"
-dependency "bzip2"
-dependency "libsqlite3"
 
-source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
-       :md5 => 'd7547558fd673bd9d38e2108c6b42521'
+if ohai['platform'] != 'windows'
 
-relative_path "Python-#{version}"
+  dependency "ncurses"
+  dependency "zlib"
+  dependency "openssl"
+  dependency "bzip2"
+  dependency "libsqlite3"
 
-env = {
-  "CFLAGS" => "-I#{install_dir}/embedded/include -O3 -g -pipe",
-  "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib"
-}
+  source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
+         :md5 => 'd7547558fd673bd9d38e2108c6b42521'
 
-python_configure = ["./configure",
-                    "--enable-universalsdk=/",
-                    "--prefix=#{install_dir}/embedded"]
+  relative_path "Python-#{version}"
 
-if ohai['platform_family'] == 'mac_os_x'
-  python_configure.push('--enable-ipv6',
-                        '--with-universal-archs=intel',
-                        '--enable-shared')
-end
+  env = {
+    "CFLAGS" => "-I#{install_dir}/embedded/include -O3 -g -pipe",
+    "LDFLAGS" => "-Wl,-rpath,#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib"
+  }
 
-python_configure.push("--with-dbmliborder=")
+  python_configure = ["./configure",
+                      "--enable-universalsdk=/",
+                      "--prefix=#{install_dir}/embedded"]
 
-build do
-  ship_license "PSFL"
-  command python_configure.join(" "), :env => env
-  patch :source => "disable_sslv3.patch" if ohai['platform_family'] == 'mac_os_x'
-  command "make -j #{workers}", :env => env
-  command "make install", :env => env
-  delete "#{install_dir}/embedded/lib/python2.7/test"
+  if ohai['platform_family'] == 'mac_os_x'
+    python_configure.push('--enable-ipv6',
+                          '--with-universal-archs=intel',
+                          '--enable-shared')
+  end
 
-  # There exists no configure flag to tell Python to not compile readline support :(
-  block do
-    FileUtils.rm_f(Dir.glob("#{install_dir}/embedded/lib/python2.7/lib-dynload/readline.*"))
+  python_configure.push("--with-dbmliborder=")
+
+  build do
+    ship_license "PSFL"
+    command python_configure.join(" "), :env => env
+    patch :source => "disable_sslv3.patch" if ohai['platform_family'] == 'mac_os_x'
+    command "make -j #{workers}", :env => env
+    command "make install", :env => env
+    delete "#{install_dir}/embedded/lib/python2.7/test"
+
+    # There exists no configure flag to tell Python to not compile readline support :(
+    block do
+      FileUtils.rm_f(Dir.glob("#{install_dir}/embedded/lib/python2.7/lib-dynload/readline.*"))
+    end
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
   end
 end

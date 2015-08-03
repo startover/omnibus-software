@@ -18,44 +18,53 @@
 name "nrpe"
 default_version "2.13"
 
-dependency "zlib"
-dependency "openssl"
-dependency "libwrap"
+if ohai['platform'] != 'windows'
 
-# tarball location comes from sourceforge download redirect
-source :url => "http://downloads.sourceforge.net/project/nagios/nrpe-2.x/nrpe-2.13/nrpe-2.13.tar.gz",
-       :md5 => "e5176d9b258123ce9cf5872e33a77c1a"
+  dependency "zlib"
+  dependency "openssl"
+  dependency "libwrap"
 
-relative_path "nrpe-2.13"
+  # tarball location comes from sourceforge download redirect
+  source :url => "http://downloads.sourceforge.net/project/nagios/nrpe-2.x/nrpe-2.13/nrpe-2.13.tar.gz",
+         :md5 => "e5176d9b258123ce9cf5872e33a77c1a"
 
-env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
-  "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}"
-}
+  relative_path "nrpe-2.13"
 
-build do
-  # TODO: OMG THIS IS HORRIBLE
-  command "sed -i 's:\\r::g' ./src/nrpe.c"
+  env = {
+    "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+    "LD_RUN_PATH" => "#{install_dir}/embedded/lib",
+    "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}"
+  }
 
-  patch :source => "fix_for_runit.patch",
-        :target => "./src/nrpe.c"
+  build do
+    # TODO: OMG THIS IS HORRIBLE
+    command "sed -i 's:\\r::g' ./src/nrpe.c"
 
-  # configure it
-  command(["./configure",
-           "--prefix=#{install_dir}/embedded",
-           "--with-ssl=#{install_dir}/embedded",
-           "--with-ssl-lib=#{install_dir}/embedded/lib",
-           "--with-ssl-inc=#{install_dir}/embedded/include"].join(" "),
-          :env => env)
+    patch :source => "fix_for_runit.patch",
+          :target => "./src/nrpe.c"
 
-  # build it
-  command "make all", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
+    # configure it
+    command(["./configure",
+             "--prefix=#{install_dir}/embedded",
+             "--with-ssl=#{install_dir}/embedded",
+             "--with-ssl-lib=#{install_dir}/embedded/lib",
+             "--with-ssl-inc=#{install_dir}/embedded/include"].join(" "),
+            :env => env)
 
-  # move it
-  mkdir "#{install_dir}/embedded/nagios/libexec"
-  mkdir "#{install_dir}/embedded/nagios/bin"
-  copy "./src/check_nrpe", "#{install_dir}/embedded/nagios/libexec"
-  copy "./src/nrpe", "#{install_dir}/embedded/nagios/bin"
+    # build it
+    command "make all", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
+
+    # move it
+    mkdir "#{install_dir}/embedded/nagios/libexec"
+    mkdir "#{install_dir}/embedded/nagios/bin"
+    copy "./src/check_nrpe", "#{install_dir}/embedded/nagios/libexec"
+    copy "./src/nrpe", "#{install_dir}/embedded/nagios/bin"
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

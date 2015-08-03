@@ -1,7 +1,11 @@
 name "pyopenssl"
 default_version "0.14"
 
-dependency "openssl"
+if ohai['platform'] == 'windows'
+  dependency "openssl-windows"
+else
+  dependency "openssl"
+end
 dependency "python"
 dependency "pip"
 dependency "libffi"

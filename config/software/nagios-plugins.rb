@@ -18,44 +18,53 @@
 name "nagios-plugins"
 default_version "1.4.15"
 
-dependency "zlib"
-dependency "openssl"
-dependency "postgresql"
-dependency "libiconv"
+if ohai['platform'] != 'windows'
 
-# the url is the location of a redirect from sourceforge
-source :url => "http://downloads.sourceforge.net/project/nagiosplug/nagiosplug/1.4.15/nagios-plugins-1.4.15.tar.gz",
-       :md5 => "56abd6ade8aa860b38c4ca4a6ac5ab0d"
+  dependency "zlib"
+  dependency "openssl"
+  dependency "postgresql"
+  dependency "libiconv"
 
-relative_path "nagios-plugins-1.4.15"
+  # the url is the location of a redirect from sourceforge
+  source :url => "http://downloads.sourceforge.net/project/nagiosplug/nagiosplug/1.4.15/nagios-plugins-1.4.15.tar.gz",
+         :md5 => "56abd6ade8aa860b38c4ca4a6ac5ab0d"
 
-configure_env = {
-  "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-  "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
-}
+  relative_path "nagios-plugins-1.4.15"
 
-gem_env = {"GEM_PATH" => nil, "GEM_HOME" => nil}
+  configure_env = {
+    "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+    "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+  }
 
-build do
-  # configure it
-  command(["./configure",
-           "--prefix=#{install_dir}/embedded/nagios",
-           "--with-trusted-path=#{install_dir}/bin:#{install_dir}/embedded/bin:/bin:/sbin:/usr/bin:/usr/sbin",
-           "--with-openssl=#{install_dir}/embedded",
-           "--with-pgsql=#{install_dir}/embedded",
-           "--with-libiconv-prefix=#{install_dir}/embedded"].join(" "),
-          :env => configure_env)
+  gem_env = {"GEM_PATH" => nil, "GEM_HOME" => nil}
 
-  # build it
-  command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
-  command "sudo make install"
+  build do
+    # configure it
+    command(["./configure",
+             "--prefix=#{install_dir}/embedded/nagios",
+             "--with-trusted-path=#{install_dir}/bin:#{install_dir}/embedded/bin:/bin:/sbin:/usr/bin:/usr/sbin",
+             "--with-openssl=#{install_dir}/embedded",
+             "--with-pgsql=#{install_dir}/embedded",
+             "--with-libiconv-prefix=#{install_dir}/embedded"].join(" "),
+            :env => configure_env)
 
-  # NOTE: cargo culted from commit 0e6eb2d4a7978c5683a3e15c956c0c2b78f3d904
-  #
-  # This is nasty but we don't use the check_ldap plugin and it has the
-  # ugly habbit of linking against system `gnutls` instead of embedded
-  # `openssl`. There is also no easy way to tell the configure task to
-  # not build it!
-  command "sudo rm -rf #{install_dir}/embedded/nagios/libexec/check_ldap"
+    # build it
+    command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/lib"}
+    command "sudo make install"
+
+    # NOTE: cargo culted from commit 0e6eb2d4a7978c5683a3e15c956c0c2b78f3d904
+    #
+    # This is nasty but we don't use the check_ldap plugin and it has the
+    # ugly habbit of linking against system `gnutls` instead of embedded
+    # `openssl`. There is also no easy way to tell the configure task to
+    # not build it!
+    command "sudo rm -rf #{install_dir}/embedded/nagios/libexec/check_ldap"
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

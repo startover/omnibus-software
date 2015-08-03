@@ -18,51 +18,60 @@
 name "openresty"
 default_version "1.4.3.6"
 
-dependency "pcre"
-dependency "openssl"
-dependency "zlib"
+if ohai['platform'] != 'windows'
 
-source :url => "http://openresty.org/download/ngx_openresty-#{version}.tar.gz",
-       :md5 => "5e5359ae3f1b8db4046b358d84fabbc8"
+  dependency "pcre"
+  dependency "openssl"
+  dependency "zlib"
 
-relative_path "ngx_openresty-#{version}"
+  source :url => "http://openresty.org/download/ngx_openresty-#{version}.tar.gz",
+         :md5 => "5e5359ae3f1b8db4046b358d84fabbc8"
 
-build do
-  env = {
-    "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-    "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-    "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
-  }
+  relative_path "ngx_openresty-#{version}"
 
-  command ["./configure",
-           "--prefix=#{install_dir}/embedded",
-           "--sbin-path=#{install_dir}/embedded/sbin/nginx",
-           "--conf-path=#{install_dir}/embedded/conf/nginx.conf",
-           "--with-http_ssl_module",
-           "--with-debug",
-           "--with-http_stub_status_module",
-           # Building Nginx with non-system OpenSSL
-           # http://www.ruby-forum.com/topic/207287#902308
-           "--with-ld-opt=\"-L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib -lssl -lcrypto -ldl -lz\"",
-           "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\"",
-           # Options inspired by the OpenResty Cookbook
-           '--with-md5-asm',
-           '--with-sha1-asm',
-           '--with-pcre-jit',
-           '--with-luajit',
-           '--without-http_ssi_module',
-           '--without-mail_smtp_module',
-           '--without-mail_imap_module',
-           '--without-mail_pop3_module',
-           '--with-ipv6',
-           # AIO support define in Openresty cookbook. Requires Kernel >= 2.6.22
-           # Ubuntu 10.04 reports: 2.6.32-38-server #83-Ubuntu SMP
-           # However, they require libatomic-ops-dev and libaio
-           #'--with-file-aio',
-           #'--with-libatomic'
-          ].join(" "), :env => env
+  build do
+    env = {
+      "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+      "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+      "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
+    }
 
-  command "make -j #{workers}", :env => env
-  command "make install"
-  touch "/opt/opscode/embedded/nginx/logs/.gitkeep"
+    command ["./configure",
+             "--prefix=#{install_dir}/embedded",
+             "--sbin-path=#{install_dir}/embedded/sbin/nginx",
+             "--conf-path=#{install_dir}/embedded/conf/nginx.conf",
+             "--with-http_ssl_module",
+             "--with-debug",
+             "--with-http_stub_status_module",
+             # Building Nginx with non-system OpenSSL
+             # http://www.ruby-forum.com/topic/207287#902308
+             "--with-ld-opt=\"-L#{install_dir}/embedded/lib -Wl,-rpath,#{install_dir}/embedded/lib -lssl -lcrypto -ldl -lz\"",
+             "--with-cc-opt=\"-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include\"",
+             # Options inspired by the OpenResty Cookbook
+             '--with-md5-asm',
+             '--with-sha1-asm',
+             '--with-pcre-jit',
+             '--with-luajit',
+             '--without-http_ssi_module',
+             '--without-mail_smtp_module',
+             '--without-mail_imap_module',
+             '--without-mail_pop3_module',
+             '--with-ipv6',
+             # AIO support define in Openresty cookbook. Requires Kernel >= 2.6.22
+             # Ubuntu 10.04 reports: 2.6.32-38-server #83-Ubuntu SMP
+             # However, they require libatomic-ops-dev and libaio
+             #'--with-file-aio',
+             #'--with-libatomic'
+            ].join(" "), :env => env
+
+    command "make -j #{workers}", :env => env
+    command "make install"
+    touch "/opt/opscode/embedded/nginx/logs/.gitkeep"
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

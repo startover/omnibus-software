@@ -21,28 +21,37 @@
 name "bzip2"
 default_version "1.0.6"
 
-dependency "zlib"
-dependency "openssl"
+if ohai['platform'] != 'windows'
 
-source :url => "http://www.bzip.org/#{version}/#{name}-#{version}.tar.gz",
-       :md5 => "00b516f4704d4a7cb50a1d97e6e8e15b"
+  dependency "zlib"
+  dependency "openssl"
 
-relative_path "#{name}-#{version}"
+  source :url => "http://www.bzip.org/#{version}/#{name}-#{version}.tar.gz",
+         :md5 => "00b516f4704d4a7cb50a1d97e6e8e15b"
 
-prefix="#{install_dir}/embedded"
-libdir="#{prefix}/lib"
+  relative_path "#{name}-#{version}"
 
-env = {
-  "LDFLAGS" => "-L#{libdir} -I#{prefix}/include",
-  "CFLAGS" => "-L#{libdir} -I#{prefix}/include -fPIC",
-  "LD_RUN_PATH" => libdir
-}
+  prefix="#{install_dir}/embedded"
+  libdir="#{prefix}/lib"
 
-build do
-  ship_license "https://gist.githubusercontent.com/remh/227fefddabefc998235f/raw/cc614178cf79580e04671c4d6acfbe95028b1842/bzip2.LICENSE"
-  patch :source => 'makefile_take_env_vars.patch'
-  patch :source => 'soname_install_dir.patch' if ohai['platform_family'] == 'mac_os_x' 
-  command "make PREFIX=#{prefix} VERSION=#{version}", :env => env
-  command "make PREFIX=#{prefix} VERSION=#{version} -f Makefile-libbz2_so", :env => env
-  command "make install VERSION=#{version} PREFIX=#{prefix}", :env => env
+  env = {
+    "LDFLAGS" => "-L#{libdir} -I#{prefix}/include",
+    "CFLAGS" => "-L#{libdir} -I#{prefix}/include -fPIC",
+    "LD_RUN_PATH" => libdir
+  }
+
+  build do
+    ship_license "https://gist.githubusercontent.com/remh/227fefddabefc998235f/raw/cc614178cf79580e04671c4d6acfbe95028b1842/bzip2.LICENSE"
+    patch :source => 'makefile_take_env_vars.patch'
+    patch :source => 'soname_install_dir.patch' if ohai['platform_family'] == 'mac_os_x'
+    command "make PREFIX=#{prefix} VERSION=#{version}", :env => env
+    command "make PREFIX=#{prefix} VERSION=#{version} -f Makefile-libbz2_so", :env => env
+    command "make install VERSION=#{version} PREFIX=#{prefix}", :env => env
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end

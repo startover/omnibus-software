@@ -18,38 +18,47 @@
 name "gecode"
 default_version "3.7.3"
 
-version "3.7.3" do
-  source :md5 => "7a5cb9945e0bb48f222992f2106130ac"
-end
+if ohai['platform'] != 'windows'
 
-version "3.7.1" do
-  source :md5 => "b4191d8cfafa18bd9b78594544be2a04"
-end
+  version "3.7.3" do
+    source :md5 => "7a5cb9945e0bb48f222992f2106130ac"
+  end
 
-source :url => "http://www.gecode.org/download/gecode-#{version}.tar.gz"
+  version "3.7.1" do
+    source :md5 => "b4191d8cfafa18bd9b78594544be2a04"
+  end
 
-relative_path "gecode-#{version}"
+  source :url => "http://www.gecode.org/download/gecode-#{version}.tar.gz"
 
-test = Mixlib::ShellOut.new("test -f /usr/bin/gcc44")
-test.run_command
+  relative_path "gecode-#{version}"
 
-configure_env = if test.exitstatus == 0
-                  {"CC" => "gcc44", "CXX" => "g++44"}
-                else
-                  {}
-                end
+  test = Mixlib::ShellOut.new("test -f /usr/bin/gcc44")
+  test.run_command
 
-build do
-  command(["./configure",
-           "--prefix=#{install_dir}/embedded",
-           "--disable-doc-dot",
-           "--disable-doc-search",
-           "--disable-doc-tagfile",
-           "--disable-doc-chm",
-           "--disable-doc-docset",
-           "--disable-qt",
-           "--disable-examples"].join(" "),
-          :env => configure_env)
-  command "make -j #{workers}", :env => { "LD_RUN_PATH" => "#{install_dir}/embedded/lib" }
-  command "make install"
+  configure_env = if test.exitstatus == 0
+                    {"CC" => "gcc44", "CXX" => "g++44"}
+                  else
+                    {}
+                  end
+
+  build do
+    command(["./configure",
+             "--prefix=#{install_dir}/embedded",
+             "--disable-doc-dot",
+             "--disable-doc-search",
+             "--disable-doc-tagfile",
+             "--disable-doc-chm",
+             "--disable-doc-docset",
+             "--disable-qt",
+             "--disable-examples"].join(" "),
+            :env => configure_env)
+    command "make -j #{workers}", :env => { "LD_RUN_PATH" => "#{install_dir}/embedded/lib" }
+    command "make install"
+  end
+
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end
