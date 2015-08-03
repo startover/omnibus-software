@@ -18,57 +18,66 @@
 name "makedepend"
 default_version "1.0.5"
 
-source :url => 'http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.5.tar.gz',
-  :md5 => 'efb2d7c7e22840947863efaedc175747'
+if ohai['platform'] != 'windows'
 
-relative_path 'makedepend-1.0.5'
+  source :url => 'http://xorg.freedesktop.org/releases/individual/util/makedepend-1.0.5.tar.gz',
+    :md5 => 'efb2d7c7e22840947863efaedc175747'
 
-dependency "xproto"
-dependency 'util-macros'
-dependency 'pkg-config'
+  relative_path 'makedepend-1.0.5'
 
-configure_env =
-  case ohai['platform']
-  when "aix"
-    {
-      "CC" => "xlc -q64",
-      "CXX" => "xlC -q64",
-      "LD" => "ld -b64",
-      "CFLAGS" => "-q64 -I#{install_dir}/embedded/include -O",
-      "LDFLAGS" => "-q64 -Wl,-blibpath:/usr/lib:/lib",
-      "OBJECT_MODE" => "64",
-      "ARFLAGS" => "-X64 cru",
-      "LD" => "ld -b64",
-      "OBJECT_MODE" => "64",
-      "ARFLAGS" => "-X64 cru "
-    }
-  when "mac_os_x"
-    {
-      "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-      "CFLAGS" => "-I#{install_dir}/embedded/include -L#{install_dir}/embedded/lib"
-    }
-  when "solaris2"
-    {
-      "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include -static-libgcc",
-      "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include"
-    }
-  else
-    {
-      "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
-      "CFLAGS" => "-I#{install_dir}/embedded/include -L#{install_dir}/embedded/lib"
-    }
+  dependency "xproto"
+  dependency 'util-macros'
+  dependency 'pkg-config'
+
+  configure_env =
+    case ohai['platform']
+    when "aix"
+      {
+        "CC" => "xlc -q64",
+        "CXX" => "xlC -q64",
+        "LD" => "ld -b64",
+        "CFLAGS" => "-q64 -I#{install_dir}/embedded/include -O",
+        "LDFLAGS" => "-q64 -Wl,-blibpath:/usr/lib:/lib",
+        "OBJECT_MODE" => "64",
+        "ARFLAGS" => "-X64 cru",
+        "LD" => "ld -b64",
+        "OBJECT_MODE" => "64",
+        "ARFLAGS" => "-X64 cru "
+      }
+    when "mac_os_x"
+      {
+        "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+        "CFLAGS" => "-I#{install_dir}/embedded/include -L#{install_dir}/embedded/lib"
+      }
+    when "solaris2"
+      {
+        "LDFLAGS" => "-R#{install_dir}/embedded/lib -L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include -static-libgcc",
+        "CFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include"
+      }
+    else
+      {
+        "LDFLAGS" => "-L#{install_dir}/embedded/lib -I#{install_dir}/embedded/include",
+        "CFLAGS" => "-I#{install_dir}/embedded/include -L#{install_dir}/embedded/lib"
+      }
+    end
+
+  configure_env["PKG_CONFIG_PATH"] = "#{install_dir}/embedded/lib/pkgconfig" +
+    File::PATH_SEPARATOR +
+    "#{install_dir}/embedded/share/pkgconfig"
+
+  # For pkg-config
+  configure_env["PATH"] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + ENV["PATH"]
+
+  build do
+    ship_license "https://raw.githubusercontent.com/ioerror/makedepend/master/LICENSE"
+    command "./configure --prefix=#{install_dir}/embedded", :env => configure_env
+    command "make -j #{workers}", :env => configure_env
+    command "make -j #{workers} install", :env => configure_env
   end
 
-configure_env["PKG_CONFIG_PATH"] = "#{install_dir}/embedded/lib/pkgconfig" +
-  File::PATH_SEPARATOR +
-  "#{install_dir}/embedded/share/pkgconfig"
-
-# For pkg-config
-configure_env["PATH"] = "#{install_dir}/embedded/bin" + File::PATH_SEPARATOR + ENV["PATH"]
-
-build do
-  ship_license "https://raw.githubusercontent.com/ioerror/makedepend/master/LICENSE"
-  command "./configure --prefix=#{install_dir}/embedded", :env => configure_env
-  command "make -j #{workers}", :env => configure_env
-  command "make -j #{workers} install", :env => configure_env
+else
+  # We create a dummy file for the omnibus git_cache to work on Windows
+  build do
+    command "touch #{install_dir}/uselessfile"
+  end
 end
