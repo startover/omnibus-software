@@ -16,9 +16,9 @@
 #
 
 name "python"
-default_version "2.7.10"
 
 if ohai['platform'] != 'windows'
+  default_version "2.7.10"
 
   dependency "ncurses"
   dependency "zlib"
@@ -63,8 +63,24 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  # We create a dummy file for the omnibus git_cache to work on Windows
+  default_version "2.7.9"
+  # We're gonna get a standard binary (TODO react according to the architecture)
+  source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi"
   build do
-    command "touch #{install_dir}/uselessfile"
+    # In case Python is already installed on the build machine well... let's uninstall it
+    # (fortunately we're building in a VM :) )
+    command "start /wait msiexec /x python-#{version}.amd64.msi /qn"
+
+    # Installs Python with all the components we need (pip..) under C:\python-omnibus
+    command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\"C:\\python-omnibus\" /qn"
+
+    # Let's ship the Python binaries TODO :  compute the "27" part
+    copy "C:\\python-omnibus\\python.exe", "#{install_dir}\\embedded\\bin\\python.exe"
+    copy "C:\\python-omnibus\\pythonw.exe", "#{install_dir}\\embedded\\bin\\pythonw.exe"
+    sync "C:\\python-omnibus\\DLLs", "#{install_dir}\\embedded\\dlls"
+
+    # And the libs
+    sync "C:\\python-omnibus\\Lib", "#{install_dir}\\embedded\\lib"
+    sync "C:\\python-omnibus\\libs", "#{install_dir}\\embedded\\libs"
   end
 end

@@ -16,16 +16,22 @@
 #
 
 name "pip"
-default_version "6.1.1"
 
-dependency "setuptools"
+if ohai['platform'] != 'windows'
 
-source :url => "https://pypi.python.org/packages/source/p/pip/pip-#{version}.tar.gz",
-       :md5 => '6b19e0a934d982a5a4b798e957cb6d45'
+  default_version "6.1.1"
 
-relative_path "pip-#{version}"
+  dependency "setuptools"
 
-build do
-  ship_license "https://raw.githubusercontent.com/pypa/pip/develop/LICENSE.txt"
-  command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
+  source :url => "https://pypi.python.org/packages/source/p/pip/pip-#{version}.tar.gz",
+         :md5 => '6b19e0a934d982a5a4b798e957cb6d45'
+
+  relative_path "pip-#{version}"
+
+  build do
+    ship_license "https://raw.githubusercontent.com/pypa/pip/develop/LICENSE.txt"
+    command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
+  end
+else
+  copy "C:\\python-omnibus\\Scripts\\pip.exe", "#{install_dir}\\embedded\\bin\\pip.exe"
 end
