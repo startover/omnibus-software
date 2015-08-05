@@ -78,12 +78,12 @@ else
     mkdir "#{install_dir}\\embedded\\bin"
 
     # Let's ship the Python binaries
-    command "copy C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
-    command "copy C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
-    sync "C:\\python-omnibus\\DLLs", "#{install_dir}\\embedded\\dlls"
+    copy "copy C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
+    copy "copy C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
+    sync "C:\\python-omnibus\\DLLs", "#{windows_safe_path(install_dir)}\\embedded\\dlls"
 
     # And the libs
-    sync "C:\\python-omnibus\\Lib", "#{install_dir}\\embedded\\lib"
-    sync "C:\\python-omnibus\\libs", "#{install_dir}\\embedded\\libs"
+    sync "C:\\python-omnibus\\Lib", "#{windows_safe_path(install_dir)}\\embedded\\lib"
+    sync "C:\\python-omnibus\\libs", "#{windows_safe_path(install_dir)}\\embedded\\libs"
   end
 end
