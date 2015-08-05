@@ -1,15 +1,15 @@
 name "libpq"
 default_version "9.4.0"
 
+source :url => "http://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.gz",
+       :md5 => "349552802c809c4e8b09d8045a437787"
+
 if ohai['platform'] != 'windows'
 
   dependency "zlib"
   dependency "openssl"
   dependency "libedit"
   dependency "ncurses"
-
-  source :url => "http://ftp.postgresql.org/pub/source/v#{version}/postgresql-#{version}.tar.gz",
-         :md5 => "349552802c809c4e8b09d8045a437787"
 
   relative_path "postgresql-#{version}"
 
