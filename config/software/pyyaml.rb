@@ -3,7 +3,11 @@ default_version "3.11"
 
 dependency "python"
 dependency "pip"
-dependency "libyaml"
+if ohai['paltform'] == 'windows'
+  dependency "libyaml-windows"
+else
+  dependency "libyaml"
+end
 
 build do
   ship_license "http://pyyaml.org/export/385/pyyaml/trunk/LICENSE"
