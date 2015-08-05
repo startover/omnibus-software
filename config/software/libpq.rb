@@ -38,7 +38,7 @@ if ohai['platform'] != 'windows'
 
 else
   source :url => "http://get.enterprisedb.com/postgresql/postgresql-9.4.4-3-windows-x64-binaries.zip",
-         :md5 => ""
+         :md5 => "094d18f3534d1a6c1cab17d37fb88319"
 
   build do
     ship_license "https://raw.githubusercontent.com/lpsmith/postgresql-libpq/master/LICENSE"
