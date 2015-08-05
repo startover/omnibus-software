@@ -19,6 +19,7 @@ if ohai['platform'] != 'windows'
     "LD_RUN_PATH" => "#{install_dir}/embedded/lib"
   }
 
+
   build do
     ship_license "https://raw.githubusercontent.com/lpsmith/postgresql-libpq/master/LICENSE"
     command [ "./configure",
@@ -37,6 +38,28 @@ if ohai['platform'] != 'windows'
 else
   # We create a dummy file for the omnibus git_cache to work on Windows
   build do
-    command "touch #{install_dir}/uselessfile"
+    ship_license "https://raw.githubuser/content.com/lpsmith/postgresql-libpq/master/LICENSE"
+
+    env = {
+      "LDFLAGS" => "-L#{windows_safe_path(install_dir)}\\embedded\\lib -I#{windows_safe_path(install_dir)}\\embedded\\include",
+      "CFLAGS" => "-L#{windows_safe_path(install_dir)}\\embedded\\lib -I#{windows_safe_path(install_dir)}\\embedded\\include",
+      "LD_RUN_PATH" => "#{install_dir}\\embedded\\lib"
+    }
+
+    # make is actually shipped with chefdk... Pretty convenient isn't it ? As long as we build in a
+    # chef provision machine we have it in our path, which is awesome. In case we want to change
+    # at some point, we'll have to add a software definition that downloads and installs MinGW or
+    # Cygwin to compile pg_config and libpq.
+    command [ ".\\configure",
+              "--prefix=#{windows_safe_path(install_dir)}\\embedded",
+              "--with-libedit-preferred",
+              "--with-openssl",
+              "--with-includes=#{windows_safe_path(install_dir)}\\embedded\\include",
+              "--with-libraries=#{windows_safe_path(install_dir)}\\embedded\\lib" ].join(" "), :env => env
+    command "make -j #{workers}", :env => { "LD_RUN_PATH" => "#{windows_safe_path(install_dir)}\\embedded\\lib"}
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\include\\postgresql"
+    command "make -C src\\include install"
+    command "make -C src\\interfaces install"
+    command "make -C src\\bin\\pg_config install"
   end
 end
