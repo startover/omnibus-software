@@ -13,6 +13,6 @@ build do
   # After trying to compile unsuccessfully with VisualC++ and MinGW let's stick to the
   # standard windows "solutions" : download the binaries and making a nice copy of it :)
   mkdir "#{windows_safe_path(install_dir)}\\embedded\\include\\postgresql"
-  command "COPY bin\pg_config.exe #{windows_safe_path(install_dir)}\\embedded\\bin"
+  command "COPY bin\\pg_config.exe #{windows_safe_path(install_dir)}\\embedded\\bin"
 end
 
