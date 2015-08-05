@@ -50,9 +50,9 @@ else
     # chef provision machine we have it in our path, which is awesome. In case we want to change
     # at some point, we'll have to add a software definition that downloads and installs MinGW or
     # Cygwin to compile pg_config and libpq.
+    command "pwd"
     command "C:\\opscode\\chefdk\\embedded\\bash.exe -c 'ls -la .'"
     command "bash -c 'pwd'"
-    command "pwd"
     command [ "bash -c './configure",
               "--prefix=#{install_dir}//embedded",
               "--with-libedit-preferred",
