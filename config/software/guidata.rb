@@ -18,14 +18,14 @@ build do
     env = {
       "PATH" => "#{windows_safe_path(install_dir)}\\embedded\\bin:#{ENV["PATH"]}"
     }
+    command "SET LC_ALL=\"C\""
+    command "SET PATH=\"#{env['PATH']}\""
     command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "\
-            "--record #{windows_safe_path(install_dir)}\\embedded\\guidata-files.txt", :env => env
+            "--record #{windows_safe_path(install_dir)}\\embedded\\guidata-files.txt"
   else
     env = {
       "PATH" => "#{install_dir}/embedded/bin:#{ENV["PATH"]}"
     }
-    command "SET LC_ALL=\"C\""
-    command "SET PATH=\"#{env['PATH']}\""
     command "#{install_dir}/embedded/bin/python setup.py install "\
             "--record #{install_dir}/embedded/guidata-files.txt", :env => env
   end
