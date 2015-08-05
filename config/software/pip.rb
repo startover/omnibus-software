@@ -34,6 +34,6 @@ if ohai['platform'] != 'windows'
   end
 else
   build do
-    copy "C:\\python-omnibus\\Scripts\\pip.exe", "#{install_dir}\\embedded\\bin\\pip.exe"
+    command "copy C:\\python-omnibus\\Scripts\\pip.exe #{install_dir}\\embedded\\bin\\pip.exe"
   end
 end
