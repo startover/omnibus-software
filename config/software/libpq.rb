@@ -38,7 +38,7 @@ if ohai['platform'] != 'windows'
 else
   # We create a dummy file for the omnibus git_cache to work on Windows
   build do
-    ship_license "https://raw.githubuser/content.com/lpsmith/postgresql-libpq/master/LICENSE"
+    ship_license "https://raw.githubusercontent.com/lpsmith/postgresql-libpq/master/LICENSE"
 
     env = {
       "LDFLAGS" => "-L#{windows_safe_path(install_dir)}\\embedded\\lib -I#{windows_safe_path(install_dir)}\\embedded\\include",
