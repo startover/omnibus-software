@@ -33,6 +33,7 @@ if ohai['platform'] != 'windows'
     command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   end
 else
+  default_version "1.5.6"
   build do
     command "COPY C:\\python-omnibus\\Scripts\\pip.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pip.exe"
   end
