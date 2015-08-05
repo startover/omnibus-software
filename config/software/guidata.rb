@@ -17,6 +17,12 @@ env = {
 build do
   patch :source => 'fix_blocking_import.patch'
   patch :source => 'remove_default_image_path.patch' if ohai['platform_family'] == 'mac_os_x'
-  command "#{install_dir}/embedded/bin/python setup.py install "\
-          "--record #{install_dir}/embedded/guidata-files.txt", :env => env
+  patch :source => 'remove_default_image_path.patch' if ohai['platform_family'] == 'windows'
+  if ohai['platform'] == 'windows'
+    command "#{install_dir}\\embedded\\bin\\python setup.py install "\
+            "--record #{install_dir}/embedded/guidata-files.txt", :env => env
+  else
+    command "#{install_dir}/embedded/bin/python setup.py install "\
+            "--record #{install_dir}/embedded/guidata-files.txt", :env => env
+  end
 end
