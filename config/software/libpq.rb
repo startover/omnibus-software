@@ -43,7 +43,7 @@ else
     env = {
       "LDFLAGS" => "-L#{windows_safe_path(install_dir)}\\embedded\\lib -I#{windows_safe_path(install_dir)}\\embedded\\include",
       "CFLAGS" => "-L#{windows_safe_path(install_dir)}\\embedded\\lib -I#{windows_safe_path(install_dir)}\\embedded\\include",
-      "LD_RUN_PATH" => "#{install_dir}\\embedded\\lib"
+      "LD_RUN_PATH" => "#{windows_safe_path(install_dir)}\\embedded\\lib"
     }
 
     # make is actually shipped with chefdk... Pretty convenient isn't it ? As long as we build in a
