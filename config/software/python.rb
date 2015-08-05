@@ -74,7 +74,7 @@ else
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
     command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\"C:\\python-omnibus\" /qn"
 
-    # Let's ship the Python binaries TODO :  compute the "27" part
+    # Let's ship the Python binaries
     copy "C:\\python-omnibus\\python.exe", "#{install_dir}\\embedded\\bin\\python.exe"
     copy "C:\\python-omnibus\\pythonw.exe", "#{install_dir}\\embedded\\bin\\pythonw.exe"
     sync "C:\\python-omnibus\\DLLs", "#{install_dir}\\embedded\\dlls"
