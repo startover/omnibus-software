@@ -83,6 +83,8 @@ else
     # Let's ship the Python binaries
     command "COPY C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
     command "COPY C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
+    command "COPY C:\\python-omnibus\\python27.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\python27.dll"
+    command "COPY C:\\python-omnibus\\msvcr90.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\msvcr90.dll"
     command "XCOPY /Y /H /E C:\\python-omnibus\\DLLs #{windows_safe_path(install_dir)}\\embedded\\dlls"
 
     # And the libs
