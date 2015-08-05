@@ -41,7 +41,6 @@ else
          :md5 => "094d18f3534d1a6c1cab17d37fb88319"
 
   build do
-    command "REN \"C:\\omnibus-ruby\\src\\pgsql\" \"C:\\omnibus-ruby\\src\\libpq\""
     ship_license "https://raw.githubusercontent.com/lpsmith/postgresql-libpq/master/LICENSE"
 
     # After trying to compile unsuccessfully with VisualC++ and MinGW let's stick to the
