@@ -50,12 +50,12 @@ else
     # chef provision machine we have it in our path, which is awesome. In case we want to change
     # at some point, we'll have to add a software definition that downloads and installs MinGW or
     # Cygwin to compile pg_config and libpq.
-    command [ "bash .\\configure",
+    command [ "bash -c '.\\configure",
               "--prefix=#{windows_safe_path(install_dir)}\\embedded",
               "--with-libedit-preferred",
               "--with-openssl",
               "--with-includes=#{windows_safe_path(install_dir)}\\embedded\\include",
-              "--with-libraries=#{windows_safe_path(install_dir)}\\embedded\\lib" ].join(" "), :env => env
+              "--with-libraries=#{windows_safe_path(install_dir)}\\embedded\\lib '" ].join(" "), :env => env
     command "make -j #{workers}", :env => { "LD_RUN_PATH" => "#{windows_safe_path(install_dir)}\\embedded\\lib"}
     mkdir "#{windows_safe_path(install_dir)}\\embedded\\include\\postgresql"
     command "make -C src\\include install"
