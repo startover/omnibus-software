@@ -75,11 +75,11 @@ else
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
     command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\"C:\\python-omnibus\" /qn"
 
-    mkdir "#{install_dir}\\embedded\\bin"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
 
     # Let's ship the Python binaries
-    copy "copy C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
-    copy "copy C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
+    copy "copy C:\\python-omnibus\\python.exe", "#{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
+    copy "copy C:\\python-omnibus\\pythonw.exe", "#{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
     sync "C:\\python-omnibus\\DLLs", "#{windows_safe_path(install_dir)}\\embedded\\dlls"
 
     # And the libs
