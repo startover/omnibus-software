@@ -76,6 +76,9 @@ else
     command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\"C:\\python-omnibus\" /qn"
 
     mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\libs"
 
     # Let's ship the Python binaries
     command "COPY C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
