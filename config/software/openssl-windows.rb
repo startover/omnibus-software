@@ -59,8 +59,8 @@ build do
   # Ensure the directory exists
   mkdir tmpdir
 
-  # First extract the tar file out of lzma archive.
-  command "7z.exe x #{project_file} -o#{tmpdir} -r -y", env: env
+  # First extract the tar file out of lzma archive. FIXME: deal with all versions
+  command "7z.exe x openssl-1.0.1p-x86-windows.tar.lzma -o#{tmpdir} -r -y", env: env
 
   # Now extract the files out of tar archive.
   command "7z.exe x #{File.join(tmpdir, "openssl-#{version}-x86-windows.tar")} -o#{tmpdir} -r -y", env: env
