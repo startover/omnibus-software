@@ -65,7 +65,8 @@ if ohai['platform'] != 'windows'
 else
   default_version "2.7.9"
   # We're gonna get a standard binary (TODO react according to the architecture)
-  source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi"
+  source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
+         :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
   build do
     # In case Python is already installed on the build machine well... let's uninstall it
     # (fortunately we're building in a VM :) )
