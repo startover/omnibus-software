@@ -5,7 +5,10 @@ if ohai['platform'] == 'windows'
   dependency "openssl-windows"
   dependency "python"
   dependency "pip"
-  command "#{install_dir}/embedded/bin/pip install -I pyopenssl==#{version}"
+
+  build do
+    command "#{install_dir}/embedded/bin/pip install -I pyopenssl==#{version}"
+  end
 else
   dependency "openssl"
   dependency "libffi"
