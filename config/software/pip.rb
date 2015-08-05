@@ -33,5 +33,7 @@ if ohai['platform'] != 'windows'
     command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   end
 else
-  copy "C:\\python-omnibus\\Scripts\\pip.exe", "#{install_dir}\\embedded\\bin\\pip.exe"
+  build do
+    copy "C:\\python-omnibus\\Scripts\\pip.exe", "#{install_dir}\\embedded\\bin\\pip.exe"
+  end
 end
