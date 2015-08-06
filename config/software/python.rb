@@ -18,6 +18,11 @@
 name "python"
 default_version "2.7.10"
 
+source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
+       :md5 => 'd7547558fd673bd9d38e2108c6b42521'
+
+relative_path "Python-#{version}"
+
 if ohai['platform'] != 'windows'
 
   dependency "ncurses"
@@ -25,11 +30,6 @@ if ohai['platform'] != 'windows'
   dependency "openssl"
   dependency "bzip2"
   dependency "libsqlite3"
-
-  source :url => "http://python.org/ftp/python/#{version}/Python-#{version}.tgz",
-         :md5 => 'd7547558fd673bd9d38e2108c6b42521'
-
-  relative_path "Python-#{version}"
 
   env = {
     "CFLAGS" => "-I#{install_dir}/embedded/include -O3 -g -pipe",
@@ -63,21 +63,12 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  if ohai['kernel']['machine'] == 'x86_64'
-    msi_name = "python-#{version}.amd64.msi"
-    source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
-           :md5 => '35f5c301beab341f6f6c9785939882ee'
-  else
-    msi_name = "python-#{version}.msi"
-    source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.msi",
-           :md5 => '4ba2c79b103f6003bc4611c837a08208'
-  end
   build do
-    # In case Python is already installed on the build machine well... let's uninstall it
-    # (fortunately we're building in a VM :) )
-    command "start /wait msiexec /x #{msi_name} /qn"
-
-    mkdir "#{windows_safe_path(install_dir)}\\embedded"
+    if ohai['kernel']['machine'] == 'x86_64'
+      command "PCBuild\\build.bat -e -p x64"
+    else
+      command "PCBuild\\build.bat -e"
+    end
 
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
     command "start /wait msiexec /i #{msi_name} TARGETDIR="\
