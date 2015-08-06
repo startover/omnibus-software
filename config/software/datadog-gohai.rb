@@ -8,11 +8,11 @@ if ohai['platform'] == 'windows'
   # This DSL will install Go on the system (but it won't be shipped with the agent ofc)
   dependency "golang"
 
-  gobin = 'C:\\golang-omnibus\\bin\\go.exe'
+  gobin = 'C:\\golang_omnibus\\bin\\go.exe'
 
   build do
     command "cmd /C \"SET GOPATH=\"#{Omnibus::Config.cache_dir}\\src\\#{name}\" && "\
-            "SET GOROOT=\"C:\\golang-omnibus\" && "\
+            "SET GOROOT=\"C:\\golang_omnibus\\\" && "\
             "#{gobin} get -d -u github.com/DataDog/gohai && "\
             "CHDIR #{Omnibus::Config.cache_dir}\\src\\#{name}\\src\\github.com\\Datadog\\gohai && "\
             "git checkout #{version} && git pull && "\
