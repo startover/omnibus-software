@@ -72,11 +72,13 @@ else
     # (fortunately we're building in a VM :) )
     command "start /wait msiexec /x python-#{version}.amd64.msi /qn"
 
+    mkdir "#{windows_safe_path(install_dir)}\\embedded"
+
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
     command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\""\
             "#{windows_safe_path(install_dir)}\\embedded\" /qn"
 
-    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\libs"
