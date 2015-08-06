@@ -20,7 +20,7 @@ build do
     }
     command "SET LC_ALL=\"C\""
     command "SET PATH=\"#{env['PATH']}\""
-    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "\
+    command "#{windows_safe_path(install_dir)}\\embedded\\python setup.py install "\
             "--record #{windows_safe_path(install_dir)}\\embedded\\guidata-files.txt"
   else
     env = {
