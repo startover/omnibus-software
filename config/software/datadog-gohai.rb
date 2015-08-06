@@ -12,7 +12,6 @@ if ohai['platform'] == 'windows'
 
   build do
     command "cmd /C \"SET GOPATH=\"#{Omnibus::Config.cache_dir}\\src\\#{name}\" && "\
-            "SET GOROOT=\"C:\\golang_omnibus\\\" && "\
             "#{gobin} get -d -u github.com/DataDog/gohai && "\
             "CHDIR #{Omnibus::Config.cache_dir}\\src\\#{name}\\src\\github.com\\Datadog\\gohai && "\
             "git checkout #{version} && git pull && "\
