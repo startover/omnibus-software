@@ -65,7 +65,7 @@ if ohai['platform'] != 'windows'
 else
   if ohai['kernel']['machine'] == 'x86_64'
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
-           :md5 => '21ee51a9f44b7160cb6fc68e29a1ddd0'
+           :md5 => '35f5c301beab341f6f6c9785939882ee'
   else
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.msi",
            :md5 => '4ba2c79b103f6003bc4611c837a08208'
