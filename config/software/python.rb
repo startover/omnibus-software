@@ -73,22 +73,23 @@ else
     command "start /wait msiexec /x python-#{version}.amd64.msi /qn"
 
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
-    command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\"C:\\python-omnibus\" /qn"
+    command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\""\
+            "#{windows_safe_path(install_dir)}\\embedded\" /qn"
 
-    mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
-    mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
-    mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
-    mkdir "#{windows_safe_path(install_dir)}\\embedded\\libs"
+    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
+    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
+    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
+    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\libs"
 
-    # Let's ship the Python binaries
-    command "COPY C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
-    command "COPY C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
-    command "COPY C:\\python-omnibus\\python27.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\python27.dll"
-    command "COPY C:\\python-omnibus\\msvcr90.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\msvcr90.dll"
-    command "XCOPY /Y /H /E C:\\python-omnibus\\DLLs #{windows_safe_path(install_dir)}\\embedded\\dlls"
+    # # Let's ship the Python binaries
+    # command "COPY C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
+    # command "COPY C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
+    # command "COPY C:\\python-omnibus\\python27.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\python27.dll"
+    # command "COPY C:\\python-omnibus\\msvcr90.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\msvcr90.dll"
+    # command "XCOPY /Y /H /E C:\\python-omnibus\\DLLs #{windows_safe_path(install_dir)}\\embedded\\dlls"
 
-    # And the libs
-    command "XCOPY /Y /H /E C:\\python-omnibus\\Lib #{windows_safe_path(install_dir)}\\embedded\\lib"
-    command "XCOPY /Y /H /E C:\\python-omnibus\\libs #{windows_safe_path(install_dir)}\\embedded\\libs"
+    # # And the libs
+    # command "XCOPY /Y /H /E C:\\python-omnibus\\Lib #{windows_safe_path(install_dir)}\\embedded\\lib"
+    # command "XCOPY /Y /H /E C:\\python-omnibus\\libs #{windows_safe_path(install_dir)}\\embedded\\libs"
   end
 end
