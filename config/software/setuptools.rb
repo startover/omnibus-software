@@ -28,12 +28,11 @@ relative_path "setuptools-#{version}"
 build do
   ship_license "PSFL"
   if ohai['platform'] == 'windows'
-    command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
-  else
-    mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
     command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "\
-            "--prefix=#{windows_safe_path(install_dir)}\\embedded", :env => {
-              'PYTHONPATH' => "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
-            }
+            "--prefix=#{windows_safe_path(install_dir)}\\embedded"#, :env => {
+            #   'PYTHONPATH' => "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
+            # }
+  else
+    command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   end
 end
