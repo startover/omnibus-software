@@ -78,6 +78,8 @@ else
     command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\""\
             "#{windows_safe_path(install_dir)}\\embedded\" /qn"
 
+    command "SETX PYTHONPATH C:\\datadog-agent\\embedded"
+
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
     # mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
