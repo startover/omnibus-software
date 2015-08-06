@@ -9,5 +9,6 @@ source :url => 'http://download.microsoft.com/download/7/9/6/796EF2E4-801B-4FC4-
 build do
     command "start /wait msiexec /x VCForPython27.msi /qn"
     command "start /wait msiexec /i VCForPython27.msi /qn"
+    touch "#{install_dir}/uselessfile"
 end
 
