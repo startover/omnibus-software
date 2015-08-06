@@ -9,7 +9,7 @@ source :url => "https://storage.googleapis.com/golang/go#{version}.windows-amd64
 
 build do
     command "start /wait msiexec /x go#{version}.windows-amd64.msi /qn"
-    command "start /wait msiexec /i go#{version}.windows-amd64.msi TARGETDIR=\""\
+    command "start /wait msiexec /i go#{version}.windows-amd64.msi INSTALLDIR=\""\
         "C:\\golang-omnibus\" /qn"
 
   #touch "#{install_dir}/uselessfile"
