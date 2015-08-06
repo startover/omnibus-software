@@ -16,9 +16,9 @@
 #
 
 name "python"
+default_version "2.7.10"
 
 if ohai['platform'] != 'windows'
-  default_version "2.7.10"
 
   dependency "ncurses"
   dependency "zlib"
@@ -63,10 +63,13 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  default_version "2.7.9"
-  # We're gonna get a standard binary (TODO react according to the architecture)
-  source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
-         :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
+  if ohai['kernel']['machine'] == 'x86_64'
+    source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
+           :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
+  else
+    source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.msi",
+           :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
+  end
   build do
     # In case Python is already installed on the build machine well... let's uninstall it
     # (fortunately we're building in a VM :) )
@@ -79,21 +82,5 @@ else
             "#{windows_safe_path(install_dir)}\\embedded\" /qn"
 
     command "SETX PYTHONPATH \"#{windows_safe_path(install_dir)}\\embedded\""
-
-    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\bin"
-    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\dlls"
-    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib"
-    # mkdir "#{windows_safe_path(install_dir)}\\embedded\\libs"
-
-    # # Let's ship the Python binaries
-    # command "COPY C:\\python-omnibus\\python.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\python.exe"
-    # command "COPY C:\\python-omnibus\\pythonw.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pythonw.exe"
-    # command "COPY C:\\python-omnibus\\python27.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\python27.dll"
-    # command "COPY C:\\python-omnibus\\msvcr90.dll #{windows_safe_path(install_dir)}\\embedded\\bin\\msvcr90.dll"
-    # command "XCOPY /Y /H /E C:\\python-omnibus\\DLLs #{windows_safe_path(install_dir)}\\embedded\\dlls"
-
-    # # And the libs
-    # command "XCOPY /Y /H /E C:\\python-omnibus\\Lib #{windows_safe_path(install_dir)}\\embedded\\lib"
-    # command "XCOPY /Y /H /E C:\\python-omnibus\\libs #{windows_safe_path(install_dir)}\\embedded\\libs"
   end
 end
