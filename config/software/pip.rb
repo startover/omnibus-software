@@ -34,7 +34,5 @@ if ohai['platform'] != 'windows'
   end
 else
   default_version "1.5.6"
-  build do
-    command "COPY C:\\python-omnibus\\Scripts\\pip.exe #{windows_safe_path(install_dir)}\\embedded\\bin\\pip.exe"
-  end
+  # NOTHING TO DO, pip is shipped with Python on Windows
 end
