@@ -63,12 +63,12 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  if ohai['kernel']['machine'] != 'x86_64'
+  if ohai['kernel']['machine'] == 'x86_64'
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
-           :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
+           :md5 => '21ee51a9f44b7160cb6fc68e29a1ddd0'
   else
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.msi",
-           :md5 => "21ee51a9f44b7160cb6fc68e29a1ddd0"
+           :md5 => '4ba2c79b103f6003bc4611c837a08208'
   end
   build do
     # In case Python is already installed on the build machine well... let's uninstall it
