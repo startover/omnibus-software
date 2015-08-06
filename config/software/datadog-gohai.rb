@@ -9,16 +9,16 @@ if ohai['platform'] == 'windows'
   dependency "golang"
 
   build do
-    command "cmd /C \"SET GOPATH=\"#{cache_dir}\\src\\#{name}\" && "\
+    command "cmd /C \"SET GOPATH=\"#{Omnibus::Config.cache_dir}\\src\\#{name}\" && "\
             "#{gobin} get -d -u github.com/DataDog/gohai\" && "\
-            "CHDIR #{cache_dir}\\src\\#{name}\\src\\github.com\\Datadog\\gohai && "\
+            "CHDIR #{Omnibus::Config.cache_dir}\\src\\#{name}\\src\\github.com\\Datadog\\gohai && "\
             "git checkout #{default-version} && git pull && "\
             "#{gobin} build -o #{install_dir}\\bin\\gohai.exe gohai.go"
   end
 else
   env = {
     "GOROOT" => "/usr/local/go",
-    "GOPATH" => "#{cache_dir}/src/#{name}"
+    "GOPATH" => "#{Omnibus::Config.cache_dir}/src/#{name}"
   }
 
   if ohai['platform_family'] == 'mac_os_x'
