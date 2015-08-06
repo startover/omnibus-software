@@ -22,5 +22,9 @@ dependency "pip"
 dependency "pygments"
 
 build do
-  command "#{install_dir}/embedded/bin/pip install -I --build #{project_dir} #{name}==#{version}"
+  if ohai['platform'] == 'windows'
+    command "#{install_dir}/embedded/Scripts/pip install -I --build #{project_dir} #{name}==#{version}"
+  else
+    command "#{install_dir}/embedded/bin/pip install -I --build #{project_dir} #{name}==#{version}"
+  end
 end
