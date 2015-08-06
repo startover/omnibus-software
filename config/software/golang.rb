@@ -4,11 +4,11 @@ default_version "1.4.2"
 # Windows only DSL to install Go on the system, under C:\golang
 
 if ohai['kernel']['machine'] == 'x86_64'
-  source :url => "https://storage.googleapis.com/golang/go#{version}.windows-386.msi",
-         :md5 => '020502bc282115a2290aac77b2079530'
-else
   source :url => "https://storage.googleapis.com/golang/go#{version}.windows-amd64.msi",
          :md5 => '020502bc282115a2290aac77b2079530'
+else
+  source :url => "https://storage.googleapis.com/golang/go#{version}.windows-386.msi",
+         :md5 => '309300faf66d66d6ed1f724057033648'
 end
 
 build do
