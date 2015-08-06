@@ -29,7 +29,7 @@ relative_path "pip-#{version}"
 build do
   ship_license "https://raw.githubusercontent.com/pypa/pip/develop/LICENSE.txt"
   if ohai['platform'] == 'windows'
-    command "#{install_dir}/embedded/python setup.py install --prefix=#{install_dir}/embedded"
+    command "#{install_dir}/embedded/python setup.py install --prefix=\"#{windows_safe_path(install_dir)}\\embedded\""
   else
     command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   end
