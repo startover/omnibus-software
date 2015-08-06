@@ -27,5 +27,10 @@ relative_path "setuptools-#{version}"
 
 build do
   ship_license "PSFL"
-  command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
+  if ohai['platform'] == 'windows'
+    command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
+  else
+    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "
+            "--prefix=#{windows_safe_path(install_dir)}\\embedded"
+  end
 end
