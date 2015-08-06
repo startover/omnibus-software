@@ -14,7 +14,7 @@ if ohai['platform'] == 'windows'
     command "cmd /C \"SET GOPATH=\"#{Omnibus::Config.cache_dir}\\src\\#{name}\" && "\
             "#{gobin} get -d -u github.com/DataDog/gohai\" && "\
             "CHDIR #{Omnibus::Config.cache_dir}\\src\\#{name}\\src\\github.com\\Datadog\\gohai && "\
-            "git checkout #{default-version} && git pull && "\
+            "git checkout #{version} && git pull && "\
             "#{gobin} build -o #{install_dir}\\bin\\gohai.exe gohai.go"
   end
 else
@@ -33,7 +33,7 @@ else
   build do
      ship_license "https://raw.githubusercontent.com/DataDog/gohai/master/LICENSE"
      command "#{gobin} get -d -u github.com/DataDog/gohai", :env => env
-     command "git checkout #{default_version} && git pull", :env => env, :cwd => "#{env['GOPATH']}/src/github.com/DataDog/gohai"
+     command "git checkout #{version} && git pull", :env => env, :cwd => "#{env['GOPATH']}/src/github.com/DataDog/gohai"
      command "#{gobin} build -o #{install_dir}/bin/gohai $GOPATH/src/github.com/DataDog/gohai/gohai.go", :env => env
   end
 end
