@@ -12,9 +12,8 @@ env = {
 build do
   ship_license "https://raw.githubusercontent.com/psycopg/psycopg2/master/LICENSE"
   if ohai['platform'] == 'windows'
-    command "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version} "\
-            "--install-option=\"--pg-config\""\
-            "--install-option=\"#{install_dir}/embedded/Scripts/pg_config.exe\""
+    command "CMD /C \"SET Path=\\\"#{ENV['PATH']}:\\embedded\\Scripts\\\" && "
+            "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version} "\
   else
     command "#{install_dir}/embedded/bin/pip install -I #{name}==#{version}", :env => env
   end
