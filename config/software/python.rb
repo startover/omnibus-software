@@ -63,6 +63,7 @@ if ohai['platform'] != 'windows'
   end
 
 else
+  dependency 'vc_python'
   build do
     if ohai['kernel']['machine'] == 'x86_64'
       command "PCBuild\\build.bat -e -p x64"
