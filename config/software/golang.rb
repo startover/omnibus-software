@@ -1,5 +1,5 @@
 name "golang"
-default-version "1.4.2"
+default_version "1.4.2"
 
 # Windows only DSL to install Go on the system, under C:\golang
 # TODO: have a switch on the architecture
