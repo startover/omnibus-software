@@ -9,5 +9,9 @@ if ohai['platform'] == 'windows'
 end
 
 build do
-  command "#{install_dir}/embedded/bin/pip install -I #{name}==#{version}"
+  if ohai['platform'] == 'windows'
+    command "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
+  else
+    command "#{install_dir}/embedded/bin/pip install -I #{name}==#{version}"
+  end
 end
