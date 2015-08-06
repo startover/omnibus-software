@@ -5,7 +5,7 @@ default_version "1.4.2"
 # TODO: have a switch on the architecture
 
 source :url => "https://storage.googleapis.com/golang/go#{version}.windows-amd64.msi",
-       :md5 => ""
+       :md5 => '020502bc282115a2290aac77b2079530'
 
 build do
     command "start /wait msiexec /x go#{version}.windows-amd64.msi /qn"
