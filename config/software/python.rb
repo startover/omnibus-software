@@ -64,21 +64,23 @@ if ohai['platform'] != 'windows'
 
 else
   if ohai['kernel']['machine'] == 'x86_64'
+    msi_name = "python-#{version}.amd64.msi"
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.amd64.msi",
            :md5 => '35f5c301beab341f6f6c9785939882ee'
   else
+    msi_name = "python-#{version}.msi"
     source :url => "https://www.python.org/ftp/python/#{version}/python-#{version}.msi",
            :md5 => '4ba2c79b103f6003bc4611c837a08208'
   end
   build do
     # In case Python is already installed on the build machine well... let's uninstall it
     # (fortunately we're building in a VM :) )
-    command "start /wait msiexec /x python-#{version}.amd64.msi /qn"
+    command "start /wait msiexec /x #{msi_name} /qn"
 
     mkdir "#{windows_safe_path(install_dir)}\\embedded"
 
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
-    command "start /wait msiexec /i python-#{version}.amd64.msi TARGETDIR=\""\
+    command "start /wait msiexec /i #{msi_name} TARGETDIR=\""\
             "#{windows_safe_path(install_dir)}\\embedded\" /qn"
 
     command "SETX PYTHONPATH \"#{windows_safe_path(install_dir)}\\embedded\""
