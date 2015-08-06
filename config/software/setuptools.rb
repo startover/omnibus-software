@@ -25,7 +25,7 @@ relative_path "setuptools-#{version}"
 
 if ohai['platform'] == 'windows'
   source :url => 'https://bootstrap.pypa.io/ez_setup.py',
-         :md5 => ''
+         :md5 => 'c33d9c950d8408ca7c9a65c6202dd027'
 
   build do
     command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python ez_setup.py "
