@@ -7,7 +7,8 @@ if ohai['platform'] == 'windows'
   dependency "pip"
 
   build do
-    command "#{install_dir}/embedded/bin/pip install -I pyopenssl==#{version}"
+    ship_license "https://raw.githubusercontent.com/pyca/pyopenssl/master/LICENSE"
+    command "#{install_dir}/embedded/Scripts/pip install -I pyopenssl==#{version}"
   end
 else
   dependency "openssl"
