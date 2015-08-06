@@ -20,19 +20,21 @@ default_version "0.7.7"
 
 dependency "python"
 
-source :url => "https://pypi.python.org/packages/source/s/setuptools/setuptools-#{version}.tar.gz",
-       :md5 => '0d7bc0e1a34b70a97e706ef74aa7f37f'
 
 relative_path "setuptools-#{version}"
 
-build do
-  ship_license "PSFL"
-  if ohai['platform'] == 'windows'
-    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "\
-            "--prefix=#{windows_safe_path(install_dir)}\\embedded"#, :env => {
-            #   'PYTHONPATH' => "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
-            # }
-  else
+if ohai['platform'] == 'windows'
+  source :url => 'https://bootstrap.pypa.io/ez_setup.py',
+         :md5 => ''
+
+  build do
+    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python ez_setup.py "
+  end
+else
+  source :url => "https://pypi.python.org/packages/source/s/setuptools/setuptools-#{version}.tar.gz",
+         :md5 => '0d7bc0e1a34b70a97e706ef74aa7f37f'
+  build do
+    ship_license "PSFL"
     command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   end
 end
