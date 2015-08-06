@@ -80,9 +80,8 @@ else
     mkdir "#{windows_safe_path(install_dir)}\\embedded"
 
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
-    command "DIR"
-    command "start /wait msiexec /i #{msi_name} TARGETDIR=\""\
-            "#{windows_safe_path(install_dir)}\\embedded\" /qn"
+    command "start /wait msiexec /i #{msi_name} TARGETDIR="\
+            "#{windows_safe_path(install_dir)}\\embedded /qn"
 
     command "SETX PYTHONPATH \"#{windows_safe_path(install_dir)}\\embedded\""
   end
