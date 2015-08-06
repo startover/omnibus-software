@@ -28,7 +28,7 @@ if ohai['platform'] == 'windows'
          :md5 => 'c33d9c950d8408ca7c9a65c6202dd027'
 
   build do
-    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python ez_setup.py "
+    command "#{windows_safe_path(install_dir)}\\embedded\\python ez_setup.py "
   end
 else
   source :url => "https://pypi.python.org/packages/source/s/setuptools/setuptools-#{version}.tar.gz",
