@@ -70,10 +70,6 @@ else
       command "PCBuild\\build.bat -e"
     end
 
-    # Installs Python with all the components we need (pip..) under C:\python-omnibus
-    command "start /wait msiexec /i #{msi_name} TARGETDIR="\
-            "#{windows_safe_path(install_dir)}\\embedded /qn"
-
-    command "SETX PYTHONPATH \"#{windows_safe_path(install_dir)}\\embedded\""
+    # command "SETX PYTHONPATH \"#{windows_safe_path(install_dir)}\\embedded\""
   end
 end
