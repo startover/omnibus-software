@@ -30,7 +30,10 @@ build do
   if ohai['platform'] == 'windows'
     command "#{install_dir}/embedded/bin/python setup.py install --prefix=#{install_dir}/embedded"
   else
-    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "
-            "--prefix=#{windows_safe_path(install_dir)}\\embedded"
+    mkdir "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
+    command "#{windows_safe_path(install_dir)}\\embedded\\bin\\python setup.py install "\
+            "--prefix=#{windows_safe_path(install_dir)}\\embedded", :env => {
+              'PYTHONPATH' => "#{windows_safe_path(install_dir)}\\embedded\\lib\\site-packages"
+            }
   end
 end
