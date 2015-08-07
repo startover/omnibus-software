@@ -22,10 +22,6 @@ build do
    command "make", :cwd => "/opt/rrdtool-#{version}", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
    command "make install", :cwd => "/opt/rrdtool-#{version}", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
    command "#{install_dir}/embedded/bin/python setup.py install", :cwd => "/opt/rrdtool-#{version}/bindings/python/"
-  else # Try a standard install via pip
-    if ohai['platform'] != 'windows'
-      command "#{install_dir}/embedded/bin/pip install -I #{name}==#{version}"
-    end
   end
 
 end
