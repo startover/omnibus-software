@@ -77,6 +77,7 @@ else
     # (fortunately we're building in a VM :) )
     command "start /wait msiexec /x #{msi_name} /qn"
 
+
     mkdir "#{windows_safe_path(install_dir)}\\embedded"
 
     # Installs Python with all the components we need (pip..) under C:\python-omnibus
