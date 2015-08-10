@@ -62,9 +62,7 @@ else
       FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
     end
 
-    command "echo 'aaaargh'"
-    command "bash -c 'echo Mercyyyyy'"
-    command ["bash -c 'configure",
+    command ["bash -c './configure",
              "--prefix=#{install_dir}/embedded",
              "--disable-manual",
              "--disable-debug",
