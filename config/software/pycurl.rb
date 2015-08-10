@@ -3,9 +3,9 @@ default_version "7.19.5.1"
 
 dependency "python"
 dependency "pip"
+dependency "curl"
 
 if ohai['platform'] != "windows"
-  dependency "curl"
   dependency "gdbm" if (ohai['platform'] == "mac_os_x" or ohai['platform'] == "freebsd" or ohai['platform'] == "aix")
   dependency "libgcc" if (ohai['platform'] == "solaris2" and Omnibus.config.solaris_compiler == "gcc")
 
@@ -20,6 +20,7 @@ if ohai['platform'] != "windows"
   end
 else
   build do
-    command "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
+    command "SET PYCURL_SETUP_OPTIONS=\"--avoid-stdio\" & "\
+            "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
   end
 end

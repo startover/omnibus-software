@@ -3,6 +3,7 @@ default_version "3.11"
 
 dependency "python"
 dependency "pip"
+
 if ohai['platform'] == 'windows'
   dependency "libyaml-windows"
 else

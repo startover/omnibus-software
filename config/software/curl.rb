@@ -58,6 +58,29 @@ if ohai['platform'] != 'windows'
 else
   # We create a dummy file for the omnibus git_cache to work on Windows
   build do
-    command "touch #{install_dir}/uselessfile"
+    ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
+    block do
+      FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
+    end
+
+    command ["./configure",
+             "--prefix=#{install_dir}/embedded",
+             "--disable-manual",
+             "--disable-debug",
+             "--enable-optimize",
+             "--disable-ldap",
+             "--disable-ldaps",
+             "--disable-rtsp",
+             "--enable-proxy",
+             "--disable-dependency-tracking",
+             "--enable-ipv6",
+             "--without-libidn",
+             "--without-gnutls",
+             "--without-librtmp",
+             "--with-ssl=#{install_dir}/embedded",
+             "--with-zlib=#{install_dir}/embedded"].join(" ")
+
+    command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/Lib"}
+    command "make install"
   end
 end
