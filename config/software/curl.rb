@@ -34,7 +34,7 @@ if ohai['platform'] != 'windows'
       FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
     end
 
-    command "bash -c 'echo AAAAAAAA'"
+    command "echo AAAAAAAA"
     command ["bash -c './configure",
              "--prefix=#{install_dir}/embedded",
              "--disable-manual",
