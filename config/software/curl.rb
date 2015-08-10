@@ -63,6 +63,7 @@ else
            :md5 => 'add6d8b80d02903c77d3d9dfe5ef1e03'
 
   build do
+    relative_path "usr"
     copy 'bin/cygcurl-4.dll', "#{install_dir}/embedded/Lib/cygcurl.dll"
   end
 end
