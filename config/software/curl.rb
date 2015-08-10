@@ -18,13 +18,13 @@
 name "curl"
 default_version "7.41.0"
 
+source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
+       :md5 => "7321a0a3012f8eede729b5a44ebef5bd"
+
 if ohai['platform'] != 'windows'
 
   dependency "zlib"
   dependency "openssl"
-
-  source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-         :md5 => "7321a0a3012f8eede729b5a44ebef5bd"
 
   relative_path "curl-#{version}"
 
