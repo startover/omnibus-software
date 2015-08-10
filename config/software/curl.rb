@@ -60,7 +60,7 @@ else
 
     # Compiling is hard... let's ship binaries instead : TODO: react according to platform
     source :url => "http://mirrors.kernel.org/sources.redhat.com/cygwin/x86_64/release/curl/libcurl4/libcurl4-7.43.0-1.tar.xz",
-           :md5 => '80f04e95b18d24d1d4b8ae085085c21a'
+           :md5 => 'add6d8b80d02903c77d3d9dfe5ef1e03'
 
   build do
     copy 'usr/bin/cygcurl-4.dll', "#{install_dir}/embedded/Lib/cygcurl.dll"
