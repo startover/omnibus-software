@@ -63,7 +63,7 @@ else
       FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
     end
 
-    command ["./configure",
+    command ["configure",
              "--prefix=#{install_dir}/embedded",
              "--disable-manual",
              "--disable-debug",
