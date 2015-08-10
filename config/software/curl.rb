@@ -18,14 +18,15 @@
 name "curl"
 default_version "7.41.0"
 
-source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
-       :md5 => "7321a0a3012f8eede729b5a44ebef5bd"
-relative_path "curl-#{version}"
-
 if ohai['platform'] != 'windows'
+
+  source :url => "http://curl.haxx.se/download/curl-#{version}.tar.gz",
+         :md5 => '7321a0a3012f8eede729b5a44ebef5bd'
 
   dependency "zlib"
   dependency "openssl"
+
+  relative_path "curl-#{version}"
 
   build do
     ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
@@ -55,31 +56,13 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  # We create a dummy file for the omnibus git_cache to work on Windows
-  build do
     ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
-    block do
-      FileUtils.rm_rf(File.join(project_dir, 'src/tool_hugehelp.c'))
-    end
 
-    command ["bash -c './configure",
-             "--prefix=#{install_dir}/embedded",
-             "--disable-manual",
-             "--disable-debug",
-             "--enable-optimize",
-             "--disable-ldap",
-             "--disable-ldaps",
-             "--disable-rtsp",
-             "--enable-proxy",
-             "--disable-dependency-tracking",
-             "--enable-ipv6",
-             "--without-libidn",
-             "--without-gnutls",
-             "--without-librtmp",
-             "--with-ssl=#{install_dir}/embedded",
-             "--with-zlib=#{install_dir}/embedded'"].join(" ")
+    # Compiling is hard... let's ship binaries instead : TODO: react according to platform
+    source :url => "http://mirrors.kernel.org/sources.redhat.com/cygwin/x86_64/release/curl/libcurl4/libcurl4-7.43.0-1.tar.xz",
+           :md5 => '80f04e95b18d24d1d4b8ae085085c21a'
 
-    command "make -j #{workers}", :env => {"LD_RUN_PATH" => "#{install_dir}/embedded/Lib"}
-    command "make install"
+  build do
+    copy 'usr/bin/cygcurl-4.dll', "#{install_dir}/embedded/Lib/cygcurl.dll"
   end
 end

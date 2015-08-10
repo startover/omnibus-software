@@ -20,7 +20,8 @@ if ohai['platform'] != "windows"
   end
 else
   build do
-    command "SET PYCURL_SETUP_OPTIONS=\"--avoid-stdio\" & "\
+    command "SET PYCURL_SETUP_OPTIONS=\"--avoid-stdio --use-libcurl-dll --curl_dir="\
+            "#{install_dir}/embedded/Lib --libcurl-lib-name=cygcurl.dll\" & "\
             "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
   end
 end
