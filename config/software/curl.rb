@@ -65,6 +65,6 @@ else
   build do
     ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
 
-    copy 'bin/cygcurl-4.dll', "#{install_dir}/embedded/Lib/cygcurl.dll"
+    copy 'cygcurl-4.dll', "#{install_dir}/embedded/Lib/cygcurl.dll"
   end
 end
