@@ -53,7 +53,8 @@ build do
   # Make sure the OpenSSL version is suitable for our path:
   # OpenSSL version is something like
   # OpenSSL 1.0.0k 5 Feb 2013
-  ruby "-e \"require 'openssl'; puts 'OpenSSL patch version check expecting <= #{version}'; exit(1) if OpenSSL::OPENSSL_VERSION.split(' ')[1] >= '#{version}'\""
+  # Forget that check, no way I'll install ruby, let's assume it's in the path already
+  command "ruby -e \"require 'openssl'; puts 'OpenSSL patch version check expecting <= #{version}'; exit(1) if OpenSSL::OPENSSL_VERSION.split(' ')[1] >= '#{version}'\""
 
   tmpdir = File.join(Omnibus::Config.cache_dir, "openssl-cache")
 
