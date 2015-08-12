@@ -20,7 +20,7 @@ if ohai['platform'] != "windows"
   end
 else
   build do
-    source :url => "http://www.lfd.uci.edu/~gohlke/pythonlibs/3i673h27/pycurl-7.19.5.1-cp35-none-win_amd64.whl",
+    source :url => "http://www.lfd.uci.edu/~gohlke/pythonlibs/3i673h27/pycurl-7.19.5.1-cp27-none-win_amd64.whl",
            :md5 => '7d92e4be99f1c31d7cc42315c110aa20'
 
     relative_path "pycurl-#{version}"
@@ -28,10 +28,5 @@ else
     # God bless the maintainers of that website, god bless their families and children over
     # a thousand generation and, of course, Gog bless the United States of America
     command "#{install_dir}/embedded/Scripts/pip install pycurl-7.19.5.1-cp35-none-win_amd64.whl"
-    # command "#{install_dir}/embedded/python setup.py --use-libcurl-dll --curl-dir="\
-    #         "#{install_dir}/embedded/ --libcurl-lib-name=cygcurl.dll --avoid-stdio"
-    # command "SET PYCURL_SETUP_OPTIONS=\"--avoid-stdio --use-libcurl-dll --curl-dir="\
-    #         "#{install_dir}/embedded/Lib --libcurl-lib-name=cygcurl.dll\" & "\
-    #         "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
   end
 end
