@@ -13,6 +13,6 @@ end
 
 build do
     command "start /wait msiexec /x go#{version}.windows-amd64.msi /qn"
-    command "start /wait msiexec /i go#{version}.windows-amd64.msi INSTALLDIR=\""\
-        "C:\\golang_omnibus\" /qn"
+    command "start /wait msiexec /i go#{version}.windows-amd64.msi INSTALLDIR="\
+        "C:\\golang_omnibus /qn"
 end
