@@ -67,6 +67,9 @@ build do
   # Now extract the files out of tar archive.
   command "7z.exe x #{File.join(tmpdir, "openssl-#{version}-x86-windows.tar")} -o#{tmpdir} -r -y", env: env
 
+  # In case...
+  mkdir "#{install_dir}/embedded/bin"
+
   # Copy over the required dlls into embedded/bin
   copy "#{tmpdir}/bin/libeay32.dll", "#{install_dir}/embedded/bin/"
   copy "#{tmpdir}/bin/ssleay32.dll", "#{install_dir}/embedded/bin/"
