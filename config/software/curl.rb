@@ -56,11 +56,11 @@ if ohai['platform'] != 'windows'
   end
 
 else
-  relative_path "usr"
-
   # Compiling is hard... let's ship binaries instead : TODO: react according to platform
   source :url => "http://mirrors.kernel.org/sources.redhat.com/cygwin/x86_64/release/curl/libcurl4/libcurl4-7.43.0-1.tar.xz",
          :md5 => 'add6d8b80d02903c77d3d9dfe5ef1e03'
+
+  relative_path "usr"
 
   build do
     ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
