@@ -29,7 +29,8 @@
 name "openssl-windows"
 default_version "1.0.1p"
 
-dependency "ruby-windows"
+# Let's assume ruby is installed on windows so we don't have to ship it with the agent
+# dependency "ruby-windows"
 
 source url: "http://dl.bintray.com/oneclick/OpenKnapsack/x86/openssl-#{version}-x86-windows.tar.lzma"
 
