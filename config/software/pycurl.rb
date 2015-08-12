@@ -27,6 +27,6 @@ else
 
     # God bless the maintainers of that website, god bless their families and children over
     # a thousand generation and, of course, Gog bless the United States of America
-    command "#{install_dir}/embedded/Scripts/pip install pycurl-7.19.5.1-cp35-none-win_amd64.whl"
+    command "#{install_dir}/embedded/Scripts/pip install pycurl-7.19.5.1-cp27-none-win_amd64.whl"
   end
 end
