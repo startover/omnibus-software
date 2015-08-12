@@ -21,7 +21,7 @@ if ohai['platform'] != "windows"
 else
   build do
     source :url => "http://www.lfd.uci.edu/~gohlke/pythonlibs/3i673h27/pycurl-7.19.5.1-cp35-none-win_amd64.whl",
-           :md5 => ''
+           :md5 => '7d92e4be99f1c31d7cc42315c110aa20'
 
     relative_path "pycurl-#{version}"
 
