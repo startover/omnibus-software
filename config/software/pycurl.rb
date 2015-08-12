@@ -25,8 +25,8 @@ else
 
     relative_path "pycurl-#{version}"
 
-    command "#{install_dir}/embedded/python setup.py --use-libcurl-dll --curl-dir=\""\
-            "#{install_dir}/embedded/Lib\" --libcurl-lib-name=cygcurl.dll"
+    command "#{install_dir}/embedded/python setup.py --use-libcurl-dll --curl-dir="\
+            "#{install_dir}/embedded/ --libcurl-lib-name=cygcurl.dll"
     # command "SET PYCURL_SETUP_OPTIONS=\"--avoid-stdio --use-libcurl-dll --curl-dir="\
     #         "#{install_dir}/embedded/Lib --libcurl-lib-name=cygcurl.dll\" & "\
     #         "#{install_dir}/embedded/Scripts/pip install -I #{name}==#{version}"
