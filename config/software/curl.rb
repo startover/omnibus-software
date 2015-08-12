@@ -60,7 +60,7 @@ else
   source :url => "https://s3.amazonaws.com/dd-agent-omnibus/curl4-7.43.0.tar.gz",
          :md5 => 'add6d8b80d02903c77d3d9dfe5ef1e03'
 
-  # relative_path "usr"
+  relative_path "curl"
 
   build do
     ship_license "https://raw.githubusercontent.com/bagder/curl/master/COPYING"
