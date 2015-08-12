@@ -20,7 +20,7 @@ if ohai['platform'] != "windows"
   end
 else
   build do
-    source :url => "",
+    source :url => "http://pycurl.sourceforge.net/download/pycurl-#{version}.tar.gz",
            :md5 => ''
     command "#{install_dir}/embedded/python setup.py --use-libcurl-dll --curl-dir=\""\
             "#{install_dir}/embedded/Lib\" --libcurl-lib-name=cygcurl.dll"
