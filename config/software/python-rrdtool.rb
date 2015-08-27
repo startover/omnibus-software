@@ -16,12 +16,11 @@ build do
    end
    command "make", :cwd => "/tmp/ExtUtils-MakeMaker-6.31"
    command "make install", :cwd => "/tmp/ExtUtils-MakeMaker-6.31"
-   command "curl -O https://github.com/startover/python-rrdtool/raw/master/rrdtool-#{version}.tar.gz", :cwd => "/opt/"
-   command "tar -xzvf rrdtool-#{version}.tar.gz", :cwd => "/opt/"
-   command "./configure", :cwd => "/opt/rrdtool-#{version}", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
-   command "make", :cwd => "/opt/rrdtool-#{version}", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
-   command "make install", :cwd => "/opt/rrdtool-#{version}", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
-   command "#{install_dir}/embedded/bin/python setup.py install", :cwd => "/opt/rrdtool-#{version}/bindings/python/"
+   command "git clone git@github.com:startover/python-rrdtool.git", :cwd => "/opt/"
+   command "./configure", :cwd => "/opt/python-rrdtool", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
+   command "make", :cwd => "/opt/python-rrdtool", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
+   command "make install", :cwd => "/opt/python-rrdtool", :env => {"PKG_CONFIG_PATH" => "/usr/lib/pkgconfig/"}
+   command "#{install_dir}/embedded/bin/python setup.py install", :cwd => "/opt/python-rrdtool/bindings/python/"
 
 
   end
