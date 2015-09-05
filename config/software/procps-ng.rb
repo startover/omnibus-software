@@ -3,7 +3,7 @@ default_version "3.3.9"
 
 dependency 'ncurses'
 
-source :url => "http://dd-agent-omnibus.s3.amazonaws.com/#{name}-#{version}.tar.xz",
+source :url => "https://github.com/startover/omnibus-packages/raw/master/#{name}-#{version}.tar.xz",
        :md5 => '0980646fa25e0be58f7afb6b98f79d74'
 
 relative_path "procps-ng-3.3.9"
@@ -15,7 +15,7 @@ env = {
 }
 
 build do
-  ship_source "http://dd-agent-omnibus.s3.amazonaws.com/#{name}-#{version}.tar.xz"
+  ship_source "https://github.com/startover/omnibus-packages/raw/master/#{name}-#{version}.tar.xz"
   ship_license "https://gitlab.com/procps-ng/procps/raw/master/COPYING"
   command(["./configure",
      "--prefix=#{install_dir}/embedded",
